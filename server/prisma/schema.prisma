@@ -12,3 +12,310 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Role {
+  UTILISATEUR
+  ADMINISTRATEUR
+}
+
+enum ParametresVisibilite{
+  PUBLIC
+  GROUPES_SEULEMENT
+  PRIVE
+}
+
+enum ParametresDeContact{
+  PERSONNE
+  MEMBRES_DE_MES_GROUPES
+  TOUT_LE_MONDE
+}
+
+model User {
+  id              Int       @id @default(autoincrement())
+  email           String    @unique
+  password        String
+  nom      String
+  avatar          String
+  biographie      String
+  role            Role      @default(UTILISATEUR)
+  parametresVisibilite  ParametresVisibilite  @default(PRIVE)
+  parametresDeContact   ParametresDeContact   @default(TOUT_LE_MONDE)
+  
+
+  journalEntries    JournalEntry[]
+  favorites       Favorite[]
+  groupCrees      Group[]
+  GroupeMembres  GroupMembre[]
+  posts          Post[]
+  comments       Comment[]
+  messagesEnvoyes   Message[]     @relation("SentMessages")
+  messagesRecues    Message[]     @relation("ReceivedMessages")
+  reposts           Report[]
+  ressourcesCrees   Resource[]
+  refreshTokens    RefreshToken[]
+
+
+  createdAt   DateTime  @default(now())
+}
+
+model Activite{
+  id              Int       @id @default(autoincrement())
+  nom             String    @unique
+  description     String?
+  
+  journalEntries  JournalActivity[]
+
+  createdAt   DateTime @default(now())
+}
+
+model JournalEntry {
+  id              Int       @id @default(autoincrement())
+  date            DateTime  
+  humeurGenerale  Int       
+  niveauEnergie   Int       
+  qualiteDuSommeil  Int     
+  niveauAnxiete     Int     
+
+  activitesRealisees  JournalActivity[]
+
+  evenementMarquants  String?
+  gratitude           String?
+
+  userId          Int
+  user            User      @relation(fields: [userId], references: [id])
+  
+  @@unique([userId, date])
+  createdAt   DateTime  @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model JournalActivity{
+  journalEntryId          Int
+  activiteId              Int
+
+  journalEntry            JournalEntry         @relation(fields: [journalEntryId], references: [id])
+  activite                Activite             @relation(fields: [activiteId], references: [id])
+
+  @@id([journalEntryId, activiteId])
+  @@index([activiteId])
+}
+
+enum Categorie{
+  ANXIETE
+  SOMMEIL
+  RELATIONS
+  TRAVAIL
+  DEUIL
+  AUTRE
+}
+
+enum Niveau{
+  DEBUTANT
+  INTERMEDIAIRE
+  AVANCE
+}
+
+enum Type {
+  ARTICLE
+  EXERCICE
+  FICHE_PRATIQUE
+  AUDIO
+  VIDEO
+  LIEN_EXTERNE
+}
+
+model Resource{
+  id              Int       @id @default(autoincrement())
+  titre           String
+  contenu         String?
+  categorie       Categorie
+  type            Type
+  duree           Int?
+  niveau          Niveau       @default(DEBUTANT)
+
+  creePar          Int
+  user            User      @relation(fields: [creePar], references: [id])
+
+  favorites         Favorite[]
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([categorie, type])
+  @@index([titre])
+}
+
+model Favorite{
+  userId          Int
+  resourceId      Int
+
+  user            User       @relation(fields: [userId], references: [id])
+  resource        Resource   @relation(fields: [resourceId], references: [id])
+
+  createdAt   DateTime  @default(now())
+
+  @@id([userId, resourceId])
+  @@index([resourceId])
+}
+
+enum GroupVisibilite {
+  PUBLIC
+  PRIVE
+}
+
+model Group{
+  id              Int           @id @default(autoincrement())
+  nom             String
+  theme           String
+  description     String
+  regles          String
+  visibilite      GroupVisibilite    @default(PUBLIC)
+  createurId      Int
+
+  createur        User          @relation(fields: [createurId], references: [id])
+
+  membres         GroupMembre[]
+  posts           Post[]
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([visibilite, theme])
+  @@index([nom])
+}
+
+enum GroupRole {
+  MEMBRE
+  MODERATEUR
+}
+
+enum AdhesionStatus {
+  EN_ATTENTE
+  ACCEPTEE
+  REFUSEE
+}
+
+model GroupMembre{
+  id              Int         @id @default(autoincrement())
+  role            GroupRole  @default(MEMBRE)
+  statut          AdhesionStatus  @default(EN_ATTENTE)
+  messageDemande  String?
+  groupId         Int
+  userId          Int
+  dateJoint       DateTime?
+
+  group           Group       @relation(fields: [groupId], references: [id])
+  user            User        @relation(fields: [userId], references: [id])
+
+  @@unique([groupId, userId])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([groupId, statut])
+  @@index([userId])
+}
+
+
+model Post{
+  id        Int   @id @default(autoincrement())
+  groupId   Int
+  auteurId  Int?
+  contenu   String
+  estCache  Boolean  @default(false)
+  
+
+  group    Group     @relation(fields: [groupId], references: [id])
+  auteur   User?     @relation(fields: [auteurId], references: [id])
+
+  comments Comment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([groupId, createdAt])
+  @@index([auteurId])
+}
+
+model Comment{
+  id        Int   @id @default(autoincrement())
+  postId    Int
+  auteurId  Int?
+  contenu   String
+  estCache  Boolean  @default(false)
+  
+  post   Post  @relation(fields: [postId], references: [id])
+  auteur User? @relation(fields: [auteurId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([postId, createdAt])
+}
+
+model Message{
+  id            Int    @id @default(autoincrement())
+  envoyerParId    Int
+  recipiantId   Int
+  contenu       String
+  
+
+  envoyerPar    User @relation("SentMessages", fields: [envoyerParId], references: [id])
+  recipiant     User @relation("ReceivedMessages", fields: [recipiantId], references: [id])
+  
+  createdAt   DateTime  @default(now())
+
+  @@index([recipiantId])
+  @@index([envoyerParId, createdAt])
+}
+
+enum ReportCategorie {
+  INAPPROPRIE
+  SPAM
+  INQUIETANT
+}
+
+enum ReportStatut {
+  EN_ATTENTE
+  TRAITE
+  REJETE
+}
+
+enum ReportResolution {
+  CONTENU_MASQUE
+  AVERTISSEMENT
+  REJETE
+}
+
+model Report{
+  id         Int            @id @default(autoincrement())
+  reporterPar Int?
+  categorie   ReportCategorie
+  statut     ReportStatut      @default(EN_ATTENTE)
+  targetId   Int
+  raison     String?
+  resolution ReportResolution?
+  dateResolution DateTime?
+
+  reporter User? @relation(fields: [reporterPar], references: [id])
+
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+
+  @@index([statut, categorie, createdAt])
+}
+
+model RefreshToken{
+  id        Int    @id @default(autoincrement())
+  tokenHash String    @unique
+  userId    Int
+  userAgent String?
+  ip        String?
+  dateExpiration DateTime
+  
+
+  user User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@index([dateExpiration])
+}
