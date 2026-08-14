@@ -1,0 +1,41 @@
+### REGISTER
+
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+    "nom": "testuser",
+    "email": "rest@test.com",
+    "password": "123456"
+}
+
+
+
+### LOGIN
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email": "test2@gmail.com",
+    "password": "123456"
+}
+
+###
+
+### TEST ROUTE PROTÉGÉE
+
+GET http://localhost:3000/auth/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJVVElMSVNBVEVVUiIsImlhdCI6MTc4NjcyNTgxMywiZXhwIjoxNzg2NzI5NDEzfQ.bPASRq5U5DCwPlexbNmbMmyMa7Bu-ekIn0euNBWmpCg 
+
+
+###
+
+###tEST ROLE ADMIN
+
+GET http://localhost:3000/auth/admin-test
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJVVElMSVNBVEVVUiIsImlhdCI6MTc4NjcyNzQyNSwiZXhwIjoxNzg2NzMxMDI1fQ.qMTjNZeZag2ljMSsHR8mwWoQ3PPcMZsJCwXPlRxtP5M
+
+### TEST LOGOUT
+
+POST http://localhost:3000/auth/logout
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJVVElMSVNBVEVVUiIsImlhdCI6MTc4NjcyODk4NSwiZXhwIjoxNzg2NzMyNTg1fQ.XySww8ggK4MWq-HErlV3X5j73wU8wPQ7xasC-fQzCRc
