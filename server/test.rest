@@ -4,19 +4,21 @@ POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-    "nom": "testuser",
-    "email": "rest@test.com",
+    "nom": "test2",
+    "email": "test2@test.com",
     "password": "123456"
 }
 
 
 
 ### LOGIN
+
+# @name login
 POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-    "email": "test2@gmail.com",
+    "email": "test2@test.com",
     "password": "123456"
 }
 
@@ -25,7 +27,7 @@ Content-Type: application/json
 ### TEST ROUTE PROTÉGÉE
 
 GET http://localhost:3000/auth/me
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJVVElMSVNBVEVVUiIsImlhdCI6MTc4NjcyNTgxMywiZXhwIjoxNzg2NzI5NDEzfQ.bPASRq5U5DCwPlexbNmbMmyMa7Bu-ekIn0euNBWmpCg 
+Authorization: Bearer {{login.response.body.token}}
 
 
 ###
@@ -61,3 +63,49 @@ Content-Type: application/json
     "recipiantId": 3,
     "contenu": "Bonjour depuis MindHarbor !"
 }
+
+
+
+
+### GET toutes journal entries
+GET http://localhost:3000/journal
+Authorization: Bearer {{login.response.body.token}}
+
+### GET journal entry by date
+GET http://localhost:3000/journal/2026-08-15
+Authorization: Bearer {{login.response.body.token}}
+
+### CREATE journal entry
+POST http://localhost:3000/journal
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+    "humeurGenerale": 4,
+    "niveauEnergie": 5,
+    "qualiteDuSommeil": 3,
+    "niveauAnxiete": 2,
+    "evenementMarquants": "Bonne journée au travail",
+    "gratitude": "Reconnaissant pour ma famille",
+    "activityIds": []
+}
+
+### UPDATE journal entry by date
+PATCH http://localhost:3000/journal/2026-08-15
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+    "humeurGenerale": 1,
+    "niveauEnergie": 1,
+    "qualiteDuSommeil": 1,
+    "niveauAnxiete": 1,
+    "evenementMarquants": "Bonne journée au travail",
+    "gratitude": "Reconnaissant pour ma famille",
+    "activityIds": []
+}
+
+### GET journal stats
+
+
+### GET journal insights

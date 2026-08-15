@@ -16,8 +16,11 @@ export function authentifier(req: Request, res: Response, next: NextFunction) {
 
 
     try {
-        const payload = jwt.verify(token, process.env.JWT_SECRET!)
-        ;(req as any).user = payload
+        const payload = jwt.verify(token, process.env.JWT_SECRET!) as any
+        ;(req as any).user = {
+            id: payload.sub,
+            role: payload.role
+        }
         next()
     } catch {
         res.status(401).json({

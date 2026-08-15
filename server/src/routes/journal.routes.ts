@@ -1,54 +1,37 @@
 import { Router } from 'express';
-import prisma from '../lib/prisma.js';
+// import { getEntries, createEntry, getEntryByDate, updateEntryByDate, getStats, getInsights } from '../controllers/journal.controller.js';
+import { getEntries, createEntry, getEntryByDate, updateEntryByDate } from '../controllers/journal.controller.js';
+import { validateBody } from '../middlewares/validate.js';
+import { authentifier } from '../middlewares/middleware.js';
+import { createJournalSchema, updateJournalSchema } from '../schemas/journal.schema.js';
 
-const router = Router();
+
+const journalRouter = Router();
+
+// Appliquer le middleware authentifier à toutes les routes journal
+journalRouter.use(authentifier);
 
 // GET localhost:3000/journal -> liste paginee de mes entrees
-router.get('/', async (req, res) => {
-    try{
-        const entries = await prisma.journalEntry.findMany({
-            orderBy: { createdAt: 'desc' },
-        });
-        return res.status(200).json(entries);
-    }catch (error) {
-        console.error("Erreur GET /journal :", error)
-        return res.status(500).json({ message: "Erreur lors de la récupération des entrées du journal" });
-    }
-})
+journalRouter.get('/', getEntries);
+
 
 
 // POST localhost:3000/journal -> entree du jour 
-router.post('/', async (req, res) => {
-    const { humeurGenerale, niveauEnergie, qualiteDuSommeil, niveauAnxiete } = req.body;
-
-    try {
-        const newEntry = await prisma.journalEntry.create({
-            data: {
-                humeurGenerale: req.body.humeurGenerale,
-                niveauEnergie: req.body.niveauEnergie,
-                qualiteDuSommeil: req.body.qualiteDuSommeil,
-                niveauAnxiete: req.body.niveauAnxiete,
-                userId: req.user.id
-            }
-        });
-        return res.status(201).json(newEntry);
-    } catch (error) {
-        console.error("Erreur POST /journal :", error);
-        return res.status(500).json({ message: "Erreur lors de la création de l'entrée du journal" });
-    }
-});
+journalRouter.post('/', validateBody(createJournalSchema), createEntry);
 
 
 //GET localhost:3000/journal/:date 
+journalRouter.get('/:date', getEntryByDate);
 
 
 // PATCH localhost:3000/journal/:date -> modifier l'entree du jour
-
+journalRouter.patch('/:date', validateBody(updateJournalSchema), updateEntryByDate);
 
 // GET localhost:3000/journal/stats?range=30d -> statistiques sur les entrees du journal
-
+// journalRouter.get('/stats', getStats);
 
 // GET localhost:3000/journal/insights -> insights sur les entrees du journal
+// journalRouter.get('/insights', getInsights);
 
 
-export default router;
+export default journalRouter;
