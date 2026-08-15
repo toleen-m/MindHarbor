@@ -30,7 +30,7 @@ enum ParametresDeContact{
 }
 
 model User {
-  id              Int       @id @default(autoincrement())
+  id              String       @id @default(cuid())
   email           String    @unique
   password        String
   nom      String
@@ -58,7 +58,7 @@ model User {
 }
 
 model Activite{
-  id              Int       @id @default(autoincrement())
+  id              String       @id @default(cuid())
   nom             String    @unique
   description     String
   
@@ -68,7 +68,7 @@ model Activite{
 }
 
 model JournalEntry {
-  id              Int       @id @default(autoincrement())
+  id              String       @id @default(cuid())
   date            DateTime  @db.Date
   humeurGenerale  Int       
   niveauEnergie   Int       
@@ -80,7 +80,7 @@ model JournalEntry {
   evenementMarquants  String
   gratitude           String?
 
-  userId          Int
+  userId          String
   user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   @@unique([userId, date])
@@ -89,8 +89,8 @@ model JournalEntry {
 }
 
 model JournalActivity{
-  journalEntryId          Int
-  activiteId              Int
+  journalEntryId          String
+  activiteId              String
 
   journalEntry            JournalEntry         @relation(fields: [journalEntryId], references: [id], onDelete: Cascade)
   activite                Activite             @relation(fields: [activiteId], references: [id], onDelete: Cascade)
@@ -124,7 +124,7 @@ enum Type {
 }
 
 model Resource{
-  id              Int       @id @default(autoincrement())
+  id              String       @id @default(cuid())
   titre           String
   contenu         String?
   categorie       Categorie
@@ -132,7 +132,7 @@ model Resource{
   duree           Int?
   niveau          Niveau       @default(DEBUTANT)
 
-  creePar          Int
+  creePar          String
   user            User      @relation(fields: [creePar], references: [id], onDelete: Cascade)
 
   favorites         Favorite[]
@@ -145,8 +145,8 @@ model Resource{
 }
 
 model Favorite{
-  userId          Int
-  resourceId      Int
+  userId          String
+  resourceId      String
 
   user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   resource        Resource   @relation(fields: [resourceId], references: [id], onDelete: Cascade)
@@ -163,13 +163,13 @@ enum GroupVisibilite {
 }
 
 model Group{
-  id              Int           @id @default(autoincrement())
+  id              String           @id @default(cuid())
   nom             String
   theme           String
   description     String
   regles          String
   visibilite      GroupVisibilite    @default(PUBLIC)
-  createurId      Int
+  createurId      String
 
   createur        User          @relation(fields: [createurId], references: [id], onDelete: Cascade)
 
@@ -195,12 +195,12 @@ enum AdhesionStatus {
 }
 
 model GroupMembre{
-  id              Int         @id @default(autoincrement())
+  id              String         @id @default(cuid())
   role            GroupRole  @default(MEMBRE)
   statut          AdhesionStatus  @default(EN_ATTENTE)
   messageDemande  String?
-  groupId         Int
-  userId          Int
+  groupId         String
+  userId          String
   dateJoint       DateTime?
 
   group           Group       @relation(fields: [groupId], references: [id], onDelete: Cascade)
@@ -216,9 +216,9 @@ model GroupMembre{
 
 
 model Post{
-  id        Int   @id @default(autoincrement())
-  groupId   Int
-  auteurId  Int?
+  id        String   @id @default(cuid())
+  groupId   String
+  auteurId  String?
   contenu   String
   visibilite  Boolean  @default(false)
   
@@ -236,9 +236,9 @@ model Post{
 }
 
 model Comment{
-  id        Int   @id @default(autoincrement())
-  postId    Int
-  auteurId  Int?
+  id        String   @id @default(cuid())
+  postId    String
+  auteurId  String?
   contenu   String
   visibilite  Boolean  @default(false)
   
@@ -252,9 +252,9 @@ model Comment{
 }
 
 model Message{
-  id            Int    @id @default(autoincrement())
-  envoyerParId    Int
-  recipiantId   Int
+  id            String    @id @default(String())
+  envoyerParId    String
+  recipiantId   String
   contenu       String
   
 
@@ -286,11 +286,11 @@ enum ReportResolution {
 }
 
 model Report{
-  id         Int            @id @default(autoincrement())
-  reporterPar Int?
+  id         String            @id @default(String())
+  reporterPar String?
   categorie   ReportCategorie
   statut     ReportStatut      @default(EN_ATTENTE)
-  targetId   Int
+  targetId   String
   raison     String?
   resolution ReportResolution?
   dateResolution DateTime?
@@ -304,9 +304,9 @@ model Report{
 }
 
 model RefreshToken{
-  id        Int    @id @default(autoincrement())
+  id        String    @id @default(cuid())
   tokenHash String    @unique
-  userId    Int
+  userId    String
   userAgent String?
   ip        String?
   dateExpiration DateTime
