@@ -252,7 +252,7 @@ model Comment{
 }
 
 model Message{
-  id            String    @id @default(String())
+  id            String    @id @default(cuid())
   envoyerParId    String
   recipiantId   String
   contenu       String
@@ -286,7 +286,7 @@ enum ReportResolution {
 }
 
 model Report{
-  id         String            @id @default(String())
+  id         String            @id @default(cuid())
   reporterPar String?
   categorie   ReportCategorie
   statut     ReportStatut      @default(EN_ATTENTE)
