@@ -60,7 +60,7 @@ model User {
 model Activite{
   id              Int       @id @default(autoincrement())
   nom             String    @unique
-  description     String?
+  description     String
   
   journalEntries  JournalActivity[]
 
@@ -69,7 +69,7 @@ model Activite{
 
 model JournalEntry {
   id              Int       @id @default(autoincrement())
-  date            DateTime  
+  date            DateTime  @db.Date
   humeurGenerale  Int       
   niveauEnergie   Int       
   qualiteDuSommeil  Int     
@@ -77,11 +77,11 @@ model JournalEntry {
 
   activitesRealisees  JournalActivity[]
 
-  evenementMarquants  String?
+  evenementMarquants  String
   gratitude           String?
 
   userId          Int
-  user            User      @relation(fields: [userId], references: [id])
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   @@unique([userId, date])
   createdAt   DateTime  @default(now())
@@ -92,8 +92,8 @@ model JournalActivity{
   journalEntryId          Int
   activiteId              Int
 
-  journalEntry            JournalEntry         @relation(fields: [journalEntryId], references: [id])
-  activite                Activite             @relation(fields: [activiteId], references: [id])
+  journalEntry            JournalEntry         @relation(fields: [journalEntryId], references: [id], onDelete: Cascade)
+  activite                Activite             @relation(fields: [activiteId], references: [id], onDelete: Cascade)
 
   @@id([journalEntryId, activiteId])
   @@index([activiteId])
@@ -133,7 +133,7 @@ model Resource{
   niveau          Niveau       @default(DEBUTANT)
 
   creePar          Int
-  user            User      @relation(fields: [creePar], references: [id])
+  user            User      @relation(fields: [creePar], references: [id], onDelete: Cascade)
 
   favorites         Favorite[]
 
@@ -148,8 +148,8 @@ model Favorite{
   userId          Int
   resourceId      Int
 
-  user            User       @relation(fields: [userId], references: [id])
-  resource        Resource   @relation(fields: [resourceId], references: [id])
+  user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resource        Resource   @relation(fields: [resourceId], references: [id], onDelete: Cascade)
 
   createdAt   DateTime  @default(now())
 
@@ -171,7 +171,7 @@ model Group{
   visibilite      GroupVisibilite    @default(PUBLIC)
   createurId      Int
 
-  createur        User          @relation(fields: [createurId], references: [id])
+  createur        User          @relation(fields: [createurId], references: [id], onDelete: Cascade)
 
   membres         GroupMembre[]
   posts           Post[]
@@ -203,8 +203,8 @@ model GroupMembre{
   userId          Int
   dateJoint       DateTime?
 
-  group           Group       @relation(fields: [groupId], references: [id])
-  user            User        @relation(fields: [userId], references: [id])
+  group           Group       @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([groupId, userId])
   createdAt   DateTime  @default(now())
@@ -220,11 +220,11 @@ model Post{
   groupId   Int
   auteurId  Int?
   contenu   String
-  estCache  Boolean  @default(false)
+  visibilite  Boolean  @default(false)
   
 
-  group    Group     @relation(fields: [groupId], references: [id])
-  auteur   User?     @relation(fields: [auteurId], references: [id])
+  group    Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  auteur   User?     @relation(fields: [auteurId], references: [id], onDelete: Cascade)
 
   comments Comment[]
 
@@ -240,10 +240,10 @@ model Comment{
   postId    Int
   auteurId  Int?
   contenu   String
-  estCache  Boolean  @default(false)
+  visibilite  Boolean  @default(false)
   
-  post   Post  @relation(fields: [postId], references: [id])
-  auteur User? @relation(fields: [auteurId], references: [id])
+  post   Post  @relation(fields: [postId], references: [id], onDelete: Cascade)
+  auteur User? @relation(fields: [auteurId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -258,8 +258,8 @@ model Message{
   contenu       String
   
 
-  envoyerPar    User @relation("SentMessages", fields: [envoyerParId], references: [id])
-  recipiant     User @relation("ReceivedMessages", fields: [recipiantId], references: [id])
+  envoyerPar    User @relation("SentMessages", fields: [envoyerParId], references: [id], onDelete: Cascade)
+  recipiant     User @relation("ReceivedMessages", fields: [recipiantId], references: [id], onDelete: Cascade)
   
   createdAt   DateTime  @default(now())
 
@@ -295,7 +295,7 @@ model Report{
   resolution ReportResolution?
   dateResolution DateTime?
 
-  reporter User? @relation(fields: [reporterPar], references: [id])
+  reporter User? @relation(fields: [reporterPar], references: [id], onDelete: Cascade)
 
   createdAt  DateTime          @default(now())
   updatedAt  DateTime          @updatedAt
@@ -312,7 +312,7 @@ model RefreshToken{
   dateExpiration DateTime
   
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime  @default(now())
 
