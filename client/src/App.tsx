@@ -7,6 +7,11 @@ import Privacy from "./pages/Privacy"
 import Messages from "./pages/Messages"
 import Navbar from "./components/Navbar"
 
+import Journal from "./pages/Journal"
+import Resource from "./pages/Resource"
+import Group from "./pages/Group"
+import Admin from "./pages/Admin"
+
 
 function App() {
     return (
@@ -19,6 +24,12 @@ function App() {
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/privacy" element={<Privacy />} />
                     <Route path="/messages" element={<Messages />} />
+
+                    <Route path="/journal" element={<Journal />} />
+                    <Route path="/resource" element={<Resource />} />
+                    <Route path="/group" element={<Group /> } />
+                    <Route path="/admin" element={<Admin />} />
+
                 </Routes>
             </BrowserRouter>
         </AuthProvider>
