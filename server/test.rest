@@ -195,3 +195,78 @@ Authorization: Bearer {{login.response.body.token}}
 
 
 
+
+##########################
+
+### liste des groups
+GET http://localhost:3000/groups
+
+
+### recherche dun groupe
+GET http://localhost:3000/groups?search=anxiete
+
+### creee group
+POST http://localhost:3000/groups
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+    "nom": "Gestion de l'anxiété",
+    "theme": "ANXIETE",
+    "description": "Groupe d'entraide pour les personnes anxieuses",
+    "regles": "Respect et bienveillance",
+    "visibilite": "PUBLIC"
+}
+
+
+### chercher un group par id
+GET http://localhost:3000/groups/cmsvmvdx1000008vsnekpto2h
+
+
+
+### demander de joindre un group
+POST http://localhost:3000/groups/cmsvmvdx1000008vsnekpto2h/join
+Authorization: Bearer {{login.response.body.token}}
+
+
+
+### (MODERATEUIR) voire les demandes
+GET http://localhost:3000/groups/cmsvmvdx1000008vsnekpto2h/requests
+Authorization: Bearer {{login.response.body.token}}
+
+
+### (MODERATEUR) accepter une demande
+PATCH http://localhost:3000/groups/cmsvmvdx1000008vsnekpto2h/requests/cmsvnkz1800031ovsldxzwwav
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+    "statut": "ACCEPTEE"
+}
+
+
+### voir puvlications du groupe
+GET http://localhost:3000/groups/cmsvmvdx1000008vsnekpto2h/posts
+Authorization: Bearer {{login.response.body.token}}
+
+### cree publication
+POST http://localhost:3000/groups/cmsvmvdx1000008vsnekpto2h/posts
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+    "contenu": "Bonjour tout le monde, je suis nouveau dans ce groupe."
+}
+
+### supprimer publication (PPAS ENCORE FAIT)
+DELETE http://localhost:3000/posts/cmsvnf9s400001ovsmb5akf18
+Authorization: Bearer {{login.response.body.token}}
+
+### post commentair
+POST http://localhost:3000/posts/cmsvnf9s400001ovsmb5akf18/comments
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+    "contenu": "Merci pour ton partage."
+}

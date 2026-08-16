@@ -7,6 +7,7 @@ import routerMessage from "./routes/messages.routes.js"
 
 import journalRouter from "./routes/journal.routes.js"
 import resourceRouter from "./routes/resource.routes.js"
+import groupRouter from "./routes/group.routes.js"
 
 dotenv.config()
 
@@ -25,6 +26,7 @@ app.use("/auth", routerAuth)
 
 app.use("/journal", journalRouter)
 app.use("/", resourceRouter)
+app.use("/", groupRouter)
 
 
 
