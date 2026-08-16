@@ -270,3 +270,42 @@ Content-Type: application/json
 {
     "contenu": "Merci pour ton partage."
 }
+
+
+
+
+######################## PAS ENCORE FAIT 
+
+### POST report
+POST http://localhost:3000/reports
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+    "targetId":"cmsxxxx",
+    "categorie":"SPAM",
+    "raison":"Publicité abusive"
+}
+
+
+#### GET reports
+GET http://localhost:3000/admin/reports
+Authorization: Bearer {{login.response.body.token}}
+
+### PATCH report
+PATCH http://localhost:3000/admin/reports/cmsxxxx
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+    "statut":"TRAITE",
+    "resolution":"AVERTISSEMENT"
+}
+
+### GET stats
+GET http://localhost:3000/admin/stats
+Authorization: Bearer {{login.response.body.token}}
+
+### suspendre uti;isateur
+PATCH http://localhost:3000/admin/users/cmsUserId/suspend
+Authorization: Bearer {{login.response.body.token}}
