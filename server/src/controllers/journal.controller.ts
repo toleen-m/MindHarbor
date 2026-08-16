@@ -27,7 +27,15 @@ export async function updateEntryByDate(req: Request, res: Response) {
 }
 
 // GET localhost:3000/journal/stats?range=30d -> statistiques sur les entrees du journal
+export async function getStats(req: Request, res: Response) {
+    const range = Number(req.query.days ?? 30);
+    const stats = await journalService.getStats(req.user!.id, range);
+    res.json(stats);
+}
 
 
 // GET localhost:3000/journal/insights -> insights sur les entrees du journal
-
+export async function getInsights(req: Request, res: Response) {
+    const insights = await journalService.getInsights(req.user!.id);
+    res.json(insights);
+}

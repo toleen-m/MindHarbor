@@ -144,6 +144,13 @@ export async function updateEntryByDate(userId: string, date: string, data: Upda
 
 
 // GET localhost:3000/journal/stats?range=30d -> statistiques sur les entrees du journal
+export async function getStats(userId: string, range: number) {
+
+}
+
 
 
 // GET localhost:3000/journal/insights -> insights sur les entrees du journal
+export async function getInsights(userId: string) {
+
+}

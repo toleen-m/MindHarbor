@@ -1,6 +1,5 @@
 import { Router } from 'express';
-// import { getEntries, createEntry, getEntryByDate, updateEntryByDate, getStats, getInsights } from '../controllers/journal.controller.js';
-import { getEntries, createEntry, getEntryByDate, updateEntryByDate } from '../controllers/journal.controller.js';
+import { getEntries, createEntry, getEntryByDate, updateEntryByDate, getStats, getInsights } from '../controllers/journal.controller.js';
 import { validateBody } from '../middlewares/validate.js';
 import { authentifier } from '../middlewares/middleware.js';
 import { createJournalSchema, updateJournalSchema } from '../schemas/journal.schema.js';
@@ -28,10 +27,10 @@ journalRouter.get('/:date', getEntryByDate);
 journalRouter.patch('/:date', validateBody(updateJournalSchema), updateEntryByDate);
 
 // GET localhost:3000/journal/stats?range=30d -> statistiques sur les entrees du journal
-// journalRouter.get('/stats', getStats);
+journalRouter.get('/stats', getStats);
 
 // GET localhost:3000/journal/insights -> insights sur les entrees du journal
-// journalRouter.get('/insights', getInsights);
+journalRouter.get('/insights', getInsights);
 
 
 export default journalRouter;

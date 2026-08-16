@@ -24,6 +24,17 @@ Content-Type: application/json
 
 ###
 
+# @name login
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email": "admin1@test.com",
+    "password": "123456"
+}
+
+###
+
 ### TEST ROUTE PROTÉGÉE
 
 GET http://localhost:3000/auth/me
@@ -109,3 +120,78 @@ Content-Type: application/json
 
 
 ### GET journal insights
+
+
+
+###################################
+
+### toutes les actibites
+GET http://localhost:3000/activities
+
+### (resource) rechercher par titre
+GET http://localhost:3000/resources?titre=Comprendre l'anxiété
+
+### (resource) recherche par categorie
+GET http://localhost:3000/resources?categorie=ANXIETE
+
+### (resource) recherche par type
+GET http://localhost:3000/resources?type=ARTICLE
+
+### (resource) RECHERche par niveau
+GET http://localhost:3000/resources?niveau=DEBUTANT
+
+### (resource) tous les resources
+GET http://localhost:3000/resources?page=1&limit=5
+
+
+### (ADMIN) cree resource 1
+POST http://localhost:3000/resources
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "titre": "Comprendre l'anxiété",
+  "contenu": "Guide complet sur l'anxiété.",
+  "categorie": "ANXIETE",
+  "type": "ARTICLE",
+  "duree": 15,
+  "niveau": "DEBUTANT"
+}
+
+### (ADMIN) cree resource 2 
+POST http://localhost:3000/resources
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "titre": "Améliorer son sommeil",
+  "contenu": "Quelques conseils pour améliorer la qualité du sommeil.",
+  "categorie": "SOMMEIL",
+  "type": "ARTICLE",
+  "duree": 15,
+  "niveau": "DEBUTANT"
+}
+
+
+### chercher une resource par id 
+GET http://localhost:3000/resources/cmsvirz1t0000dovs1zagpp48
+
+
+### ajout aux favoris
+POST http://localhost:3000/resources/cmsvirz1t0000dovs1zagpp48/favorite
+Authorization: Bearer {{login.response.body.token}}
+
+### tous les favoris
+GET http://localhost:3000/me/favorite
+Authorization: Bearer {{login.response.body.token}}
+
+### delete favoris
+DELETE http://localhost:3000/resources/cmsvirz1t0000dovs1zagpp48/favorite
+Authorization: Bearer {{login.response.body.token}}
+
+### suggestions 
+GET http://localhost:3000/me/suggestions
+Authorization: Bearer {{login.response.body.token}}
+
+
+
