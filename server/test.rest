@@ -4,8 +4,8 @@ POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-    "nom": "test2",
-    "email": "test2@test.com",
+    "nom": "test3",
+    "email": "test3@test.com",
     "password": "123456"
 }
 
@@ -18,7 +18,7 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-    "email": "test2@test.com",
+    "email": "test3@test.com",
     "password": "123456"
 }
 
@@ -81,13 +81,13 @@ Authorization: Bearer {{login.response.body.token}}
 Content-Type: application/json
 
 {
-    "humeurGenerale": 4,
+    "humeurGenerale": 5,
     "niveauEnergie": 5,
-    "qualiteDuSommeil": 3,
-    "niveauAnxiete": 2,
+    "qualiteDuSommeil": 5,
+    "niveauAnxiete": 5,
     "evenementMarquants": "Bonne journée au travail",
     "gratitude": "Reconnaissant pour ma famille",
-    "activityIds": []
+    "activityId": []
 }
 
 ### UPDATE journal entry by date
@@ -102,7 +102,7 @@ Content-Type: application/json
     "niveauAnxiete": 1,
     "evenementMarquants": "Bonne journée au travail",
     "gratitude": "Reconnaissant pour ma famille",
-    "activityIds": []
+    "activityId": []
 }
 
 ### GET journal stats

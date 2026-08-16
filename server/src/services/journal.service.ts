@@ -4,7 +4,7 @@ import type { CreateJournalInput, UpdateJournalInput } from '../schemas/journal.
 
 // GET localhost:3000/journal -> toutes les entrees du journal
 export async function getEntries(userId: string) {
-    return prisma.journalEntry.findMany({
+    const entries = await prisma.journalEntry.findMany({
         where: { userId },
 
         include: {
@@ -15,19 +15,35 @@ export async function getEntries(userId: string) {
             date: 'desc'
         }
     });
+
+    console.log("ENTRIES:", entries);
+    return entries;
 }
 
 
 // POST localhost:3000/journal -> entree du jour
 export async function createEntry(userId: string, data: CreateJournalInput) {
+    
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const existing = await prisma.journalEntry.findFirst({
-        where: {
-            userId,
-            date: today
-        }
-    });
+
+    
+    const startOfDay = new Date();
+    startOfDay.setHours(0,0,0,0);
+
+    const endOfDay = new Date();
+    endOfDay.setHours(23,59,59,999);
+
+    const existing =
+        await prisma.journalEntry.findFirst({
+            where: {
+                userId,
+                date: {
+                    gte: startOfDay,
+                    lte: endOfDay
+                }
+            }
+        });
 
     if (existing) {
         throw new Error('Entrée déjà créée aujourd\'hui');
@@ -53,13 +69,21 @@ export async function createEntry(userId: string, data: CreateJournalInput) {
 
 // GET localhost:3000/journal/:date -> entree specifique
 export async function getEntryByDate(userId: string, date: string) {
+
+    const startOfDay = new Date(`${date}T00:00:00`);
+    const endOfDay = new Date(`${date}T23:59:59.999`);
+
     return prisma.journalEntry.findFirst({
         where: {
             userId,
-            date: new Date(date)
+            date: {
+                gte: startOfDay,
+                lte: endOfDay
+            }
         },
+
         include: {
-            activitesRealisees: true,
+            activitesRealisees: true
         }
     });
 }
@@ -67,10 +91,26 @@ export async function getEntryByDate(userId: string, date: string) {
 
 // PATCH localhost:3000/journal/:date -> modifier l'entree du jour
 export async function updateEntryByDate(userId: string, date: string, data: UpdateJournalInput) {
+    
+    // console.log("URL DATE:", date);
+    // console.log("TODAY:", new Date().toLocaleDateString('en-CA'));
+
+    const requestedDate = new Date(`${date}T00:00:00`);
+
+    const startsOfToday = new Date(requestedDate);
+    startsOfToday.setHours(0, 0, 0, 0);
+
+    const endOfToday = new Date(requestedDate);
+    endOfToday.setHours(23, 59, 59, 999);
+
+
     const entry = await prisma.journalEntry.findFirst({
         where: {
             userId,
-            date: new Date(date)
+            date: {
+                gte: startsOfToday,
+                lte: endOfToday
+            }
         }
     });
 
@@ -78,13 +118,18 @@ export async function updateEntryByDate(userId: string, date: string, data: Upda
         throw new Error('Introuvable');
     }
 
-    const today = new Date().toDateString();
+    
 
-    if (entry.date.toDateString() !== today) {
+    const requestedDay = date;
+
+    const todayDay =
+        new Date().toLocaleDateString('en-CA');
+
+    if (requestedDay !== todayDay) {
         throw new Error('Modification expirée');
-    }
+}
 
-    // ai ma aider a regler ca
+    // ia ma aider a regler ca
     const updateData = Object.fromEntries(
         Object.entries(data).filter(([, value]) => value !== undefined)
     );

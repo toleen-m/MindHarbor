@@ -1,6 +1,6 @@
 DATABASE_URL=""
 
-JWT_ACCESS_SECRET="a-remplacer"
+JWT_SECRET="a-remplacer"
 JWT_REFRESH_SECRET="a-remplacer"
 ACCESS_TOKEN_TTL="15m"
 REFRESH_TOKEN_TTL="7d"
