@@ -71,7 +71,7 @@ Il faut avoir installé :
 # 1 Cloner le dépôt
 
 ```bash
-git clone https://github.com/toleen-m/MindHarbor
+git clone https://github.com/toleen-m/MindHarbor.git
 cd MindHarbor
 ```
 
