@@ -9,7 +9,7 @@ import Navbar from "./components/Navbar"
 
 import Journal from "./pages/Journal"
 import Resource from "./pages/Resource"
-// import Group from "./pages/Group"
+import Group from "./pages/Group"
 // import Admin from "./pages/Admin"
 
 
@@ -27,7 +27,7 @@ function App() {
 
                     <Route path="/journal" element={<Journal />} />
                     <Route path="/resource" element={<Resource />} />
-                    {/* <Route path="/group" element={<Group /> } /> */}
+                    <Route path="/group" element={<Group /> } />
                     {/* <Route path="/admin" element={<Admin />} /> */}
 
                 </Routes>
