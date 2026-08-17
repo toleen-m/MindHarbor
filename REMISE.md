@@ -33,9 +33,9 @@
 | Rôle | Courriel | Mot de passe | Particularité |
 |------|----------|--------------|---------------|
 | Administrateur | <admin1@test.com> | <123456> | — |
-| Modérateur | <test3@test.com> | <123456> | modère le groupe <Gestion de l'anxiété> |
-| Utilisateur | <test1@test.com> | <123456> | 30 jours de journal |
-| Utilisateur | <test4@test.com> | <123456> | profil privé |
+| Modérateur | <marc@test.com> | <123456> | modère le groupe <Gestion de l'anxiété> |
+| Utilisateur | <claire@test.com> | <123456> | 30 jours de journal |
+| Utilisateur | <claire@test.com> | <123456> | profil privé |
 
 ---
 
