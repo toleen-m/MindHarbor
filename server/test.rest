@@ -98,7 +98,7 @@ Content-Type: application/json
     "niveauAnxiete": 5,
     "evenementMarquants": "Bonne journée au travail",
     "gratitude": "Reconnaissant pour ma famille",
-    "activityId": []
+    "activityIds": []
 }
 
 ### UPDATE journal entry by date
@@ -113,14 +113,21 @@ Content-Type: application/json
     "niveauAnxiete": 1,
     "evenementMarquants": "Bonne journée au travail",
     "gratitude": "Reconnaissant pour ma famille",
-    "activityId": []
+    "activityIds": []
 }
 
 ### GET journal stats
+### 7 jours
+GET http://localhost:3000/journal/stats?days=7
+Authorization: Bearer {{login.response.body.token}}
 
+### 30jours
+GET http://localhost:3000/journal/stats?days=30
+Authorization: Bearer {{login.response.body.token}}
 
 ### GET journal insights
-
+GET http://localhost:3000/journal/insights
+Authorization: Bearer {{login.response.body.token}}
 
 
 ###################################
@@ -132,7 +139,7 @@ GET http://localhost:3000/activities
 GET http://localhost:3000/resources?titre=Comprendre l'anxiété
 
 ### (resource) recherche par categorie
-GET http://localhost:3000/resources?categorie=ANXIETE
+GET http://localhost:3000/resources?categorie=SOMMEIL
 
 ### (resource) recherche par type
 GET http://localhost:3000/resources?type=ARTICLE
@@ -231,7 +238,7 @@ Authorization: Bearer {{login.response.body.token}}
 
 
 ### (MODERATEUIR) voire les demandes
-GET http://localhost:3000/groups/cmsvmvdx1000008vsnekpto2h/requests
+GET http://localhost:3000/groups/cmswhp37e0003wwvsrllcbtkz/requests
 Authorization: Bearer {{login.response.body.token}}
 
 

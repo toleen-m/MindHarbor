@@ -9,8 +9,8 @@ import Navbar from "./components/Navbar"
 
 import Journal from "./pages/Journal"
 import Resource from "./pages/Resource"
-import Group from "./pages/Group"
-import Admin from "./pages/Admin"
+// import Group from "./pages/Group"
+// import Admin from "./pages/Admin"
 
 
 function App() {
@@ -27,8 +27,8 @@ function App() {
 
                     <Route path="/journal" element={<Journal />} />
                     <Route path="/resource" element={<Resource />} />
-                    <Route path="/group" element={<Group /> } />
-                    <Route path="/admin" element={<Admin />} />
+                    {/* <Route path="/group" element={<Group /> } /> */}
+                    {/* <Route path="/admin" element={<Admin />} /> */}
 
                 </Routes>
             </BrowserRouter>

@@ -16,7 +16,7 @@ export default function Journal() {
         niveauAnxiete: 3,
         evenementMarquants: "",
         gratitude: "",
-        activiteId: [],
+        activiteIds: [],
     });
 
 

@@ -144,8 +144,38 @@ export async function updateEntryByDate(userId: string, date: string, data: Upda
 
 
 // GET localhost:3000/journal/stats?range=30d -> statistiques sur les entrees du journal
-export async function getStats(userId: string, range: number) {
+export async function getStats(userId: string, days: number) {
 
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - days);
+
+    const stats = await prisma.journalEntry.aggregate({
+        where: {
+            userId,
+            date: {
+                gte: startDate
+            }
+        },
+
+        _avg: {
+            humeurGenerale: true,
+            niveauEnergie: true,
+            qualiteDuSommeil: true,
+            niveauAnxiete: true
+        },
+
+        _count: {
+            id: true
+        }
+    });
+
+    return {
+        NombreEntrees: stats._count.id,
+        moyenneHumeur: stats._avg.humeurGenerale,
+        moyenneEnergie: stats._avg.niveauEnergie,
+        moyenneSommeil: stats._avg.qualiteDuSommeil,
+        moyenneAnxiete: stats._avg.niveauAnxiete
+    };
 }
 
 
@@ -153,4 +183,64 @@ export async function getStats(userId: string, range: number) {
 // GET localhost:3000/journal/insights -> insights sur les entrees du journal
 export async function getInsights(userId: string) {
 
+    const stats = await prisma.journalEntry.aggregate({
+        where: {
+            userId
+        },
+
+        _avg: {
+            humeurGenerale: true,
+            niveauEnergie: true,
+            qualiteDuSommeil: true,
+            niveauAnxiete: true
+        }
+    });
+
+    const insights: string[] = [];
+    const humeur = stats._avg.humeurGenerale ?? 0;
+    const energie = stats._avg.niveauEnergie ?? 0;
+    const sommeil = stats._avg.qualiteDuSommeil ?? 0;
+    const anxiete = stats._avg.niveauAnxiete ?? 0;
+
+
+    if (humeur >= 4) {
+        insights.push("Votre humeur est généralement positive.");
+    }
+    else if (humeur <= 2) {
+        insights.push("Votre humeur moyenne est plutôt faible.");
+    }
+
+
+    if (energie >= 4) {
+        insights.push("Votre niveau d'énergie est généralement bon.");
+    }
+    else if (energie <= 2) {
+        insights.push("Votre niveau d'énergie semble assez faible.");
+    }
+
+    if (sommeil <= 2) {
+        insights.push("Votre qualité du sommeil semble faible.");
+    }
+    else if (sommeil >= 4) {
+        insights.push("Votre qualité du sommeil semble bonne.");
+    }
+
+
+    if (anxiete >= 4) {
+        insights.push("Votre niveau d'anxiété semble élevé.");
+    }
+    else if (anxiete <= 2) {
+        insights.push("Votre niveau d'anxiété semble faible.");
+    }
+
+
+
+    if (insights.length === 0) {
+        insights.push("Vos indicateurs sont relativement équilibrés.");
+    }
+
+
+    return {
+        insights
+    };
 }

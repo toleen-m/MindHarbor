@@ -19,6 +19,16 @@ journalRouter.get('/', getEntries);
 journalRouter.post('/', validateBody(createJournalSchema), createEntry);
 
 
+
+// GET localhost:3000/journal/stats?range=30d -> statistiques sur les entrees du journal
+journalRouter.get('/stats', getStats);
+
+// GET localhost:3000/journal/insights -> insights sur les entrees du journal
+journalRouter.get('/insights', getInsights);
+
+
+
+
 //GET localhost:3000/journal/:date 
 journalRouter.get('/:date', getEntryByDate);
 
@@ -26,11 +36,7 @@ journalRouter.get('/:date', getEntryByDate);
 // PATCH localhost:3000/journal/:date -> modifier l'entree du jour
 journalRouter.patch('/:date', validateBody(updateJournalSchema), updateEntryByDate);
 
-// GET localhost:3000/journal/stats?range=30d -> statistiques sur les entrees du journal
-journalRouter.get('/stats', getStats);
 
-// GET localhost:3000/journal/insights -> insights sur les entrees du journal
-journalRouter.get('/insights', getInsights);
 
 
 export default journalRouter;
