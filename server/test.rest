@@ -1,15 +1,14 @@
+
 ### REGISTER
 
 POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-    "nom": "test3",
-    "email": "test3@test.com",
+    "nom": "claire",
+    "email": "claire@test.com",
     "password": "123456"
 }
-
-
 
 ### LOGIN
 
@@ -18,30 +17,15 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-    "email": "test3@test.com",
+    "email": "claire@test.com",
     "password": "123456"
 }
-
-###
-
-# @name login
-POST http://localhost:3000/auth/login
-Content-Type: application/json
-
-{
-    "email": "admin1@test.com",
-    "password": "123456"
-}
-
-###
 
 ### TEST ROUTE PROTÉGÉE
 
 GET http://localhost:3000/auth/me
 Authorization: Bearer {{login.response.body.token}}
 
-
-###
 
 ###tEST ROLE ADMIN
 
@@ -111,8 +95,8 @@ Content-Type: application/json
     "niveauEnergie": 1,
     "qualiteDuSommeil": 1,
     "niveauAnxiete": 1,
-    "evenementMarquants": "Bonne journée au travail",
-    "gratitude": "Reconnaissant pour ma famille",
+    "evenementMarquants": "",
+    "gratitude": "",
     "activityIds": []
 }
 
@@ -132,24 +116,45 @@ Authorization: Bearer {{login.response.body.token}}
 
 ###################################
 
-### toutes les actibites
+### toutes les activites
 GET http://localhost:3000/activities
 
-### (resource) rechercher par titre
+### (resource) rechercher par titre --> changer pour le titre desirer
 GET http://localhost:3000/resources?titre=Comprendre l'anxiété
 
-### (resource) recherche par categorie
+### (resource) recherche par categorie --> changer pour la categorie desirer
 GET http://localhost:3000/resources?categorie=SOMMEIL
 
-### (resource) recherche par type
+### (resource) recherche par type --> changer pour le type desirer
 GET http://localhost:3000/resources?type=ARTICLE
 
-### (resource) RECHERche par niveau
+### (resource) RECHERche par niveau --> changer pour le niveau desirer
 GET http://localhost:3000/resources?niveau=DEBUTANT
 
-### (resource) tous les resources
+### (resource) tous les resources 
 GET http://localhost:3000/resources?page=1&limit=5
 
+### REGISTER
+
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+    "nom": "admin1",
+    "email": "admin1@test.com",
+    "password": "123456"
+}
+
+### LOGIN
+
+# @name login
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email": "admin1@test.com",
+    "password": "123456"
+}
 
 ### (ADMIN) cree resource 1
 POST http://localhost:3000/resources
@@ -180,20 +185,20 @@ Content-Type: application/json
 }
 
 
-### chercher une resource par id 
-GET http://localhost:3000/resources/cmsvirz1t0000dovs1zagpp48
+### chercher une resource par id --> changer pour le id du resource desirer
+GET http://localhost:3000/resources/id
 
 
-### ajout aux favoris
-POST http://localhost:3000/resources/cmsvirz1t0000dovs1zagpp48/favorite
+### ajout aux favoris id --> changer pour le id du resource desirer
+POST http://localhost:3000/resources/id/favorite
 Authorization: Bearer {{login.response.body.token}}
 
 ### tous les favoris
 GET http://localhost:3000/me/favorite
 Authorization: Bearer {{login.response.body.token}}
 
-### delete favoris
-DELETE http://localhost:3000/resources/cmsvirz1t0000dovs1zagpp48/favorite
+### delete favoris id --> changer pour le id du resource desirer
+DELETE http://localhost:3000/resources/id/favorite
 Authorization: Bearer {{login.response.body.token}}
 
 ### suggestions 
@@ -212,6 +217,29 @@ GET http://localhost:3000/groups
 ### recherche dun groupe
 GET http://localhost:3000/groups?search=anxiete
 
+
+### REGISTER
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+    "nom": "marc",
+    "email": "marc@test.com",
+    "password": "123456"
+}
+
+### LOGIN
+
+# @name login
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email": "marc@test.com",
+    "password": "123456"
+}
+
+
 ### creee group
 POST http://localhost:3000/groups
 Authorization: Bearer {{login.response.body.token}}
@@ -226,30 +254,48 @@ Content-Type: application/json
 }
 
 
-### chercher un group par id
-GET http://localhost:3000/groups/cmsvmvdx1000008vsnekpto2h
+### LOGIN
+
+# @name login
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email": "claire@test.com",
+    "password": "123456"
+}
+
+
+### chercher un group par id --> changer pour le id du groupe
+GET http://localhost:3000/groups/id
 
 
 
-### demander de joindre un group
-POST http://localhost:3000/groups/cmsvmvdx1000008vsnekpto2h/join
+### demander de joindre un group id --> changer pour le id du groupe
+POST http://localhost:3000/groups/id/join
+Authorization: Bearer {{login.response.body.token}}
+
+### LOGIN
+
+
+### (MODERATEUIR) voire les demandes id --> changer pour le id du groupe
+GET http://localhost:3000/groups/id/requests
 Authorization: Bearer {{login.response.body.token}}
 
 
-
-### (MODERATEUIR) voire les demandes
-GET http://localhost:3000/groups/cmswhp37e0003wwvsrllcbtkz/requests
-Authorization: Bearer {{login.response.body.token}}
-
-
-### (MODERATEUR) accepter une demande
-PATCH http://localhost:3000/groups/cmsvmvdx1000008vsnekpto2h/requests/cmsvnkz1800031ovsldxzwwav
+### (MODERATEUR) accepter une demande idGr --> changer pour le id du groupe
+### idReq --> changer pour le id du demande
+PATCH http://localhost:3000/groups/idGr/requests/idReq
 Authorization: Bearer {{login.response.body.token}}
 Content-Type: application/json
 
 {
     "statut": "ACCEPTEE"
 }
+
+
+### LOGIN
+
 
 
 ### voir puvlications du groupe
@@ -281,7 +327,7 @@ Content-Type: application/json
 
 
 
-######################## PAS ENCORE FAIT 
+######################## Tout section PAS ENCORE FAIT 
 
 ### POST report
 POST http://localhost:3000/reports
